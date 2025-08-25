@@ -1,0 +1,58 @@
+.action-tab{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: transparent;
+    width: 500px;
+}
+
+button{
+    border: none;
+    outline: none;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #FFFFFF;;
+    background-color: transparent;
+    margin: 3px;
+    padding: 5px;
+    border-radius: 20px;
+
+}
+
+button:hover{
+    background-color: #2C2C2E;
+}
+
+.filter {
+    border-radius: 20px 5px 5px 20px;
+}
+
+.sort {
+    border-radius: 5px 20px 20px 5px;
+}
+
+.btn-cont{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    background-color: #3A3A3C;
+    border-radius: 20px;
+    margin: 10px;
+}
+
+.separator {
+    display: inline-block;
+    width: 1px;            
+    height: 25px;
+    background-color: transparent;
+    color: #8E8E93;
+}
+
+#list-notes{
+    margin-left: 20px;
+    background-color: transparent;
+    padding: 10px;
+    border-left: #3A3A3C 1px solid;
+    width: 480px;
+}

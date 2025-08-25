@@ -12,7 +12,10 @@ export class Notes extends HTMLElement{
             fetch(new URL("./notes-root.css", import.meta.url)).then(r => r.text())
         ]);
 
-        this.shadow.innerHTML = `<style>${css}</style>${html}`;
+        this.shadow.innerHTML = `
+            <link rel="stylesheet" href="/styles/globals.css">
+            <style>${css}</style>
+            ${html}`;
 
         this.initializeHTMLElements();
 

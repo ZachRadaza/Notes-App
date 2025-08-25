@@ -1,6 +1,7 @@
 import { NotesButton } from "../notes-button/notes-button.js";
 import { NotesDialog } from "../notes-dialog/notes-dialog.js";
 import "../notes-dialog/notes-dialog.js";
+import "../notes-button/notes-button.js";
 
 export class NotesGroup extends HTMLElement{
 
@@ -22,7 +23,10 @@ export class NotesGroup extends HTMLElement{
             fetch(new URL("./notes-group.html", import.meta.url)).then(r => r.text()),
             fetch(new URL("./notes-group.css", import.meta.url)).then(r => r.text())
         ]);
-        this.shadow.innerHTML = `<style>${css}</style>${html}`;
+        this.shadow.innerHTML = `
+            <link rel="stylesheet" href="/styles/globals.css">
+            <style>${css}</style>
+            ${html}`;
 
         this.initializeHTMLElements();
         this.initializeFields();
@@ -33,6 +37,8 @@ export class NotesGroup extends HTMLElement{
         this.shadow.getElementById("filter")!.addEventListener("click", () => this.filterImportant());
         this.shadow.getElementById("sort")!.addEventListener("click", () => this.sortAlphabetically());
 
+        this.addFakeNotes();
+        
         this.update();
     }
 
@@ -53,6 +59,24 @@ export class NotesGroup extends HTMLElement{
         this.div = div;
     }
 
+    private addFakeNotes():void {
+        const btns = [document.createElement("notes-button") as NotesButton, document.createElement("notes-button") as NotesButton, document.createElement("notes-button") as NotesButton];
+        const titles: string[] = ["Why I am a Software Engineer", "Applications I want to develop", "Things to buy for girlfriend"];
+        const descs: string[] = ["reasons why I chose to be a SWE", "sites of apps I want to make someday", "cheap stuff I'm broke"];
+        const imp: boolean[] = [true, false, false];
+
+        let i: number = 0;
+        btns.forEach(btn => {
+            btn.setTitleNotes = titles[i]!;
+            btn.setDescription = descs[i]!;
+            btn.setImportant = imp[i]!;
+            btn.setNotesGroup = this;
+            this.notesButtonList.push(btn);
+            i++
+        });
+
+    }
+
     public addNotesButton(nb: NotesButton): void{
         this.notesButtonList.push(nb);
         this.update();
@@ -70,8 +94,18 @@ export class NotesGroup extends HTMLElement{
 
         const temp = !this.filtered ? this.notesButtonList : this.notesButtonListFiltered;
         temp.forEach(button => {
+            button.firstList = false;
+            button.lastList = false;
             this.div.appendChild(button);
         });
+
+        if(temp.length > 0){
+            const first = temp[0]!;
+            const last = temp[temp.length - 1]!;
+            first.firstList = true;
+            last.lastList = true;
+        }
+
     }
 
     //sorts

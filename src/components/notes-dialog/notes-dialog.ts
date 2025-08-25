@@ -23,7 +23,10 @@ export class NotesDialog extends HTMLDialogElement{
             fetch(new URL("./notes-dialog.html", import.meta.url)).then(r => r.text()),
             fetch(new URL("./notes-dialog.css", import.meta.url)).then(r => r.text())
         ]);
-        this.innerHTML = `<style>${css}</style>${html}`;
+        this.innerHTML = 
+            `<link rel="stylesheet" href="/styles/globals.css">
+            <style>${css}</style>
+            ${html}`;
 
         this.initializeHTMLElements();
 

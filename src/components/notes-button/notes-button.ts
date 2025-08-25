@@ -9,15 +9,18 @@ export class NotesButton extends HTMLElement{
     private titleNotes: string = 'notes';
     private description: string = "";
     private important: boolean = false;
+    private notes!: Notes;
+    private dateMade!: Date;
+    private dateUpdated!: Date;
 
     private initialized: boolean = false;
 
     private titleH1!: HTMLHeadingElement;
     private descH4!: HTMLHeadingElement;
-
-    private notes!: Notes;
-    private dateMade!: Date;
-    private dateUpdated!: Date;
+    private impSpan!: HTMLSpanElement;
+    private cont!: HTMLDivElement;
+    private first: boolean = false;
+    private last: boolean = false;
 
     //runs when added
     async connectedCallback(){
@@ -31,7 +34,10 @@ export class NotesButton extends HTMLElement{
         ]);
 
         //connects css
-        this.shadow.innerHTML = `<style>${css}</style>${html}`;
+        this.shadow.innerHTML = 
+            `<link rel="stylesheet" href="/styles/globals.css">
+            <style>${css}</style>
+            ${html}`;
 
         this.addEventListener("click", () => {
             console.log("clicked");
@@ -52,13 +58,17 @@ export class NotesButton extends HTMLElement{
     initializeHTMLElements(): void{
         const titleH1 = this.shadow.querySelector<HTMLHeadingElement>("#title-notes");
         const descH4 = this.shadow.querySelector<HTMLHeadingElement>("#description");
+        const impSpan = this.shadow.querySelector<HTMLSpanElement>("#important-icon");
+        const cont = this.shadow.querySelector<HTMLDivElement>("#container-button");
 
-        if (!titleH1 || !descH4) {
-            throw new Error("Missing #title-notes or #description in notes-button.html");
+        if (!titleH1 || !descH4 || !impSpan || !cont) {
+            throw new Error("Missing #title-notes, #important-icon, #container-button, or #description in notes-button.html");
         }
 
         this.titleH1 = titleH1;
         this.descH4 = descH4;
+        this.impSpan = impSpan;
+        this.cont = cont;
     }
 
     //getters
@@ -84,19 +94,17 @@ export class NotesButton extends HTMLElement{
 
     //setters
     public set setTitleNotes(t: string){
-        console.log(t);
         this.titleNotes = t;
         this.update();
     }
 
     public set setDescription(d: string){
-        console.log(d)
         this.description = d;
         this.update();
     }
 
     public set setImportant(i: boolean){
-        this.important = false;
+        this.important = i;
         this.update();
     }
 
@@ -110,12 +118,27 @@ export class NotesButton extends HTMLElement{
         this.update();
     }
 
+    public set firstList(b: boolean){
+        this.first = b;
+        this.update();
+    }
+    
+    public set lastList(b: boolean){
+        this.last = b;
+        this.update();
+    }
+
     //methods
     private update(){
         if (!this.initialized) return;
         this.titleH1.textContent = this.titleNotes;
         this.descH4.textContent = this.description;
+        this.impSpan.textContent = this.important ? "!" : "";
 
+        this.cont.classList.remove("first-button");
+        this.cont.classList.remove("last-button");
+        if(this.first)  this.cont.classList.add("first-button");
+        if(this.last)  this.cont.classList.add("last-button");
     }
     
     public delete(){
