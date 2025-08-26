@@ -1,5 +1,6 @@
 import type { NotesGroup } from "../notes-group/notes-group.js";
-import { Notes } from "../notes/notes.js";
+import { NotesDialog } from "../notes-dialog/notes-dialog.js";
+import "../notes-dialog/notes-dialog.js";
 
 export class NotesButton extends HTMLElement{
     //fields
@@ -8,10 +9,11 @@ export class NotesButton extends HTMLElement{
     private group!: NotesGroup;
     private titleNotes: string = 'notes';
     private description: string = "";
+    private notes: string = "";
     private important: boolean = false;
-    private notes!: Notes;
     private dateMade!: Date;
     private dateUpdated!: Date;
+    
 
     private initialized: boolean = false;
 
@@ -39,17 +41,16 @@ export class NotesButton extends HTMLElement{
             <style>${css}</style>
             ${html}`;
 
-        this.addEventListener("click", () => {
-            console.log("clicked");
-        });
-
         this.initializeHTMLElements();
 
-        //this.notes = new Notes();
         this.dateMade = new Date();
         this.dateUpdated = new Date();
 
         this.shadow.getElementById("delete")!.addEventListener("click", () => this.delete());
+        this.addEventListener("click", () => {
+            this.openDialog();
+        });
+
 
         this.update();
     }
@@ -80,6 +81,10 @@ export class NotesButton extends HTMLElement{
         return this.description;
     }
 
+    public get getNotes(){
+        return this.notes;
+    }
+
     public get getImportant(){
         return this.important;
     }
@@ -101,6 +106,10 @@ export class NotesButton extends HTMLElement{
     public set setDescription(d: string){
         this.description = d;
         this.update();
+    }
+
+    public set setNotes(n: string){
+        this.notes = n;
     }
 
     public set setImportant(i: boolean){
@@ -143,6 +152,18 @@ export class NotesButton extends HTMLElement{
     
     public delete(){
         this.group.removeNotesButton(this);
+    }
+
+    private openDialog(){
+        const dlg = document.createElement("dialog", { is: "notes-dialog" }) as HTMLDialogElement & NotesDialog;
+        this.group.shadow.appendChild(dlg);
+        (dlg as any).notesGroup = this.group;
+        (dlg as any).notesButton = this;
+        (dlg as any).newDialog = false;
+        dlg.showModal();
+        (dlg as any).titleInput = this.titleNotes;
+        (dlg as any).notes = this.notes;
+        (dlg as any).important = this.important;
     }
 }
 

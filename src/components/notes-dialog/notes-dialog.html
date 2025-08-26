@@ -1,5 +1,6 @@
 <div class="top">
-    <button id="close" type="button">x</button>
+    <button id="close" type="button">close</button>
+    <button id="submit" type="button">Done</button>
 </div>
 <div class="input-container">
     <div class="importnant-cont">
@@ -10,19 +11,17 @@
             type="checkbox"
         >
     </div>
-    <input 
-        id="title" 
-        class="title-input" 
-        type="text"
-        placeholder="Title"
-    >
-    <input 
-        id="description" 
-        class="description-input" 
-        type="text"
-        placeholder="Description"
-    >
-</div>
-<div class="btn-cont">
-    <button id="create" type="button">Create Notes</button>
+    <div class="input-area">
+        <input 
+            id="title" 
+            class="notes title-input" 
+            type="text"
+            placeholder="Title"
+        >
+        <textarea 
+            id="notes" 
+            class="notes notes-input" 
+            type="text"
+            placeholder="Write your notes here..."></textarea>
+    </div>
 </div>

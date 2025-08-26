@@ -5,7 +5,7 @@ import "../notes-button/notes-button.js";
 
 export class NotesGroup extends HTMLElement{
 
-    private shadow = this.attachShadow({ mode: "open" });
+    public shadow = this.attachShadow({ mode: "open" });
 
     private notesButtonList!: NotesButton[];
     private notesButtonListFiltered!: NotesButton[]; 
@@ -71,6 +71,8 @@ export class NotesGroup extends HTMLElement{
             btn.setDescription = descs[i]!;
             btn.setImportant = imp[i]!;
             btn.setNotesGroup = this;
+            btn.setNotes = descs[i]!;
+
             this.notesButtonList.push(btn);
             i++
         });
@@ -93,18 +95,13 @@ export class NotesGroup extends HTMLElement{
         this.div.replaceChildren();
 
         const temp = !this.filtered ? this.notesButtonList : this.notesButtonListFiltered;
+        let i = 0;
         temp.forEach(button => {
-            button.firstList = false;
-            button.lastList = false;
+            i === 0 ? button.firstList = true : button.firstList = false;
+            i === temp.length - 1 ? button.lastList = true : button.lastList = false;
             this.div.appendChild(button);
+            i++;
         });
-
-        if(temp.length > 0){
-            const first = temp[0]!;
-            const last = temp[temp.length - 1]!;
-            first.firstList = true;
-            last.lastList = true;
-        }
 
     }
 
