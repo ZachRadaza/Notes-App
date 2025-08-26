@@ -97,8 +97,8 @@ export class NotesDialog extends HTMLDialogElement{
     //methods
     private update(): void{
         if (!this._initialized) return;  
-        this.inputTitle.textContent = this._title || "";
-        this.textArea.textContent = this._notes || "";
+        this.inputTitle.value = this._title || "";
+        this.textArea.value = this._notes || "";
         this.inputImportant.checked = this._important! || false;
     }
 
@@ -136,6 +136,7 @@ export class NotesDialog extends HTMLDialogElement{
         this.button.setDescription = truncated;
         this.button.setImportant = !!this._important;
         this.button.setNotesGroup = this.group;
+        this.button.setDateUpdated = new Date();
     }
     
 

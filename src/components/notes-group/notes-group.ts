@@ -12,8 +12,11 @@ export class NotesGroup extends HTMLElement{
     private lastSort!: boolean[];
     private filtered!: boolean; //if we are using the filtered list or no
     private initialized = false;
+    private folded: boolean = false;
 
     private div!: HTMLDivElement;
+    private filt!: HTMLButtonElement;
+    private sor!: HTMLButtonElement;
 
     async connectedCallback(){
         if(this.initialized) return;
@@ -35,7 +38,7 @@ export class NotesGroup extends HTMLElement{
         this.shadow.getElementById("arrow")!.addEventListener("click", () => this.hideNotes());
         this.shadow.getElementById("add")!.addEventListener("click", () => this.openDialog());
         this.shadow.getElementById("filter")!.addEventListener("click", () => this.filterImportant());
-        this.shadow.getElementById("sort")!.addEventListener("click", () => this.sortAlphabetically());
+        this.shadow.getElementById("sort")!.addEventListener("click", () => this.sortPressed());
 
         this.addFakeNotes();
         
@@ -51,12 +54,16 @@ export class NotesGroup extends HTMLElement{
 
     private initializeHTMLElements(){
         const div = this.shadow.querySelector<HTMLDivElement>("#list-notes");
+        const filt = this.shadow.querySelector<HTMLButtonElement>("#filter");
+        const sor = this.shadow.querySelector<HTMLButtonElement>("#sort");
 
-        if (!div) {
-            throw new Error("Missing #list-notes in notes-group.html");
+        if (!div || !filt || !sor) {
+            throw new Error("Missing #list-notes, #sort, or #filter in notes-group.html");
         }
 
         this.div = div;
+        this.filt = filt;
+        this.sor = sor;
     }
 
     private addFakeNotes():void {
@@ -69,9 +76,9 @@ export class NotesGroup extends HTMLElement{
         btns.forEach(btn => {
             btn.setTitleNotes = titles[i]!;
             btn.setDescription = descs[i]!;
+            btn.setNotes = descs[i]!;
             btn.setImportant = imp[i]!;
             btn.setNotesGroup = this;
-            btn.setNotes = descs[i]!;
 
             this.notesButtonList.push(btn);
             i++
@@ -106,6 +113,16 @@ export class NotesGroup extends HTMLElement{
     }
 
     //sorts
+    private sortPressed(): void{
+        let num = this.lastSort.indexOf(true);
+        num++;
+        if(num > 2) num = 0;
+        this.lastSort.fill(false);
+        this.lastSort[num] = true;
+        this.sortByLast();
+        this.update();
+    }
+
     private sortByLast(): void{
         const type = this.lastSort.indexOf(true)
         switch(type){
@@ -132,34 +149,54 @@ export class NotesGroup extends HTMLElement{
 
         this.lastSort.fill(false);
         this.lastSort[0] = true;
+        this.sor.innerText = "sort: a-z";
     }
 
     //sorts by last update
     private sortByUpdate(): void{
         if(this.notesButtonList.length <= 1) return;
 
+                this.notesButtonList.sort((a, b) => a.getDateUpdated.length - b.getDateUpdated.length);
+
         this.lastSort.fill(false);
         this.lastSort[1] = true;
+        this.sor.innerText = "sort: last updated";
     }
 
     //sorts by creation date
     private sortByDate(): void{
         if(this.notesButtonList.length <= 1) return;
 
+        this.notesButtonList.sort((a, b) => a.getDateMade.length - b.getDateMade.length);
+
         this.lastSort.fill(false);
         this.lastSort[2] = true;
+        this.sor.innerText = "sort: date created";
     }
 
     //filters
     public filterImportant(){
-        this.notesButtonListFiltered = this.notesButtonList.filter(b => b.getImportant);
-        this.filtered = true;
+        if(!this.filtered) {
+            this.notesButtonListFiltered = this.notesButtonList.filter(b => b.getImportant);
+            this.filtered = true;
+            this.filt.innerText = "filter: On";
+        } else {
+            this.filtered = false;
+            this.filt.innerText = "filter: Off";
+        }
         this.update();
     }
 
     //arrow button
     public hideNotes(){
-        this.div.replaceChildren();
+        if(this.folded) {
+            this.update();
+            this.folded = false;
+        } else {
+            this.replaceChildren();
+            this.folded = true;
+        }
+
     }
 
     //add button
