@@ -156,13 +156,13 @@ export class NotesButton extends HTMLElement{
 
     private openDialog(){
         const dlg = document.createElement("dialog", { is: "notes-dialog" }) as HTMLDialogElement & NotesDialog;
-        this.group.shadow.appendChild(dlg);
+        document.body.appendChild(dlg);
         (dlg as any).notesGroup = this.group;
         (dlg as any).notesButton = this;
         (dlg as any).newDialog = false;
         dlg.showModal();
         (dlg as any).titleInput = this.titleNotes;
-        (dlg as any).notes = this.notes;
+        (dlg as any).noteBody = this.getNotes;
         (dlg as any).important = this.important;
     }
 }

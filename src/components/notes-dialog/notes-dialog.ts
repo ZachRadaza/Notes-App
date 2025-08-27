@@ -6,7 +6,7 @@ export class NotesDialog extends HTMLDialogElement{
 
     //fields
     private _title: string = "";
-    private _notes: string = "";
+    private _noteBody: string = "";
     private _important:boolean = false;
     private group!: NotesGroup;
     private button!: NotesButton;
@@ -19,7 +19,6 @@ export class NotesDialog extends HTMLDialogElement{
 
     async connectedCallback(){
         if(this._initialized) return;
-        this._initialized = true;
 
         const [html, css] = await Promise.all([
             fetch(new URL("./notes-dialog.html", import.meta.url)).then(r => r.text()),
@@ -32,8 +31,10 @@ export class NotesDialog extends HTMLDialogElement{
 
         this.initializeHTMLElements();
 
-        this.querySelector<HTMLButtonElement>("#close")?.addEventListener("click", () => { this.close(); this.group.shadow.removeChild(this)});
+        this.querySelector<HTMLButtonElement>("#close")?.addEventListener("click", () => { this.close(); this.remove()});
         this.querySelector<HTMLButtonElement>("#submit")?.addEventListener("click", () => this.submit());
+
+        this._initialized = true;
 
         this.update();
     }
@@ -57,8 +58,8 @@ export class NotesDialog extends HTMLDialogElement{
         return this._title;
     }
 
-    public get notes(){
-        return this._notes;
+    public get noteBody(){
+        return this._noteBody;
     }
 
     public get important(){
@@ -67,18 +68,18 @@ export class NotesDialog extends HTMLDialogElement{
 
     //setters
     public set titleInput(t: string){
-        this._title = t;
-        this.update();
+        this._title = t ?? "";
+        if (this._initialized) this.update();
     }
 
-    public set notes(t: string){
-        this._notes = t;
-        this.update();
+    public set noteBody(t: string){
+        this._noteBody = t ?? "";
+        if (this._initialized) this.update();
     }
 
     public set important(b: boolean){
-        this._important = b;
-        this.update();
+        this._important = !!b;
+        if (this._initialized) this.update();
     }
 
     public set notesGroup(g: NotesGroup){
@@ -96,19 +97,21 @@ export class NotesDialog extends HTMLDialogElement{
     }
     //methods
     private update(): void{
+        if (!this._initialized || !this.inputTitle || !this.textArea || !this.inputImportant) return;
+
         if (!this._initialized) return;  
-        this.inputTitle.value = this._title || "";
-        this.textArea.value = this._notes || "";
-        this.inputImportant.checked = this._important! || false;
+        this.inputTitle.value = this._title ?? "";
+        this.textArea.value = this._noteBody ?? "";
+        this.inputImportant.checked = this._important!;
     }
 
     public submit(): void{
         this._title = this.inputTitle.value;
-        this._notes = this.textArea.value;
+        this._noteBody = this.textArea.value;
         this._important = this.inputImportant.checked;
-        const truncated = this._notes && this._notes.length > 50
-            ? this._notes.substring(0, 50) + "..."
-            : this._notes ?? ""; // fallback to empty string if undefined
+        const truncated = this._noteBody && this._noteBody.length > 50
+            ? this._noteBody.substring(0, 50) + "..."
+            : this._noteBody ?? ""; // fallback to empty string if undefined
 
         this._newDialog ? this.create(truncated) : this.save(truncated);
         console.log(1);
@@ -121,6 +124,7 @@ export class NotesDialog extends HTMLDialogElement{
     
         (btn as any).setTitleNotes = this._title ?? "";
         (btn as any).setDescription = truncated;
+        (btn as any).setNotes = this._noteBody;
         (btn as any).setImportant = !!this._important;
         (btn as any).setNotesGroup = this.group;
         (btn as any).notesDialog = this;
@@ -134,6 +138,7 @@ export class NotesDialog extends HTMLDialogElement{
     private save(truncated: string): void {
         this.button.setTitleNotes = this._title ?? "";
         this.button.setDescription = truncated;
+        this.button.setNotes = this._noteBody;
         this.button.setImportant = !!this._important;
         this.button.setNotesGroup = this.group;
         this.button.setDateUpdated = new Date();
