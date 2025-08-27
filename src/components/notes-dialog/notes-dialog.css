@@ -1,82 +1,122 @@
 dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
     border: none;
     border-radius: 16px;
     padding: 16px;
-    width: 520px;          /* adjust to taste */
+    width: 800px;
     max-width: 95vw;
-    max-height: 90vh;      /* keep it on screen */
-    display: flex;         /* let inner layout use flex */
+    max-height: 90vh;
+    display: flex;
     flex-direction: column;
-    background: #2C2C2E;      /* or var(--background) if you use CSS vars */
+    background: #2C2C2E;
     color: #FFFFFF;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    overflow: hidden;      /* clip rounded corners */
-
+    overflow: hidden;
 }
 
 dialog::backdrop {
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(2px);
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
 }
 
-.top{
-    background-color: transparent;
+.top {
     width: 100%;
     display: flex;
-    align-items: center;
-    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
-dialog button{
+dialog button {
     border: none;
     outline: none;
     font-size: 15px;
-    line-height: 1.5;
-    color: #FFFFFF;;
+    color: #FFFFFF;
     background-color: transparent;
-    margin: 10px;
-    padding: 10px 20px;
+    margin: 8px;
+    padding: 8px 16px;
     border-radius: 20px;
-    margin-left: 20px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
-dialog button:hover{
+dialog button:hover {
     background-color: #3A3A3C;
 }
 
-.input-container{
+.input-container {
     width: 100%;
-    background-color: transparent;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    margin-top: 12px;
 }
 
-.notes{
+.important-cont {
+    margin: 8px 5px;
+}
+
+.important-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #FFD60A;
+    cursor: pointer;
+}
+
+.important-input {
+    display: none;
+}
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid #FFD60A;
+    display: inline-block;
+    position: relative;
+}
+
+.important-input:checked + .checkmark::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid #FFD60A;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.notes {
     border: 0;
     outline: none;
     background-color: #3A3A3C;
-    border-radius: 16px;
-    margin: 5px;
+    border-radius: 12px;
+    margin: 6px 5px;
+    padding: 10px;
 }
 
-.title-input{
+.title-input {
     color: #FFFFFF;
-    font-size: x-large;
+    font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: 1.5;
+    letter-spacing: 0.5px;
     line-height: 1.2;
-    border: none;
-    outline: none;
+    width: 100%;
 }
 
-.notes-input{
+.notes-input {
     color: #FFFFFF;
-    font-size: medium;
+    font-size: 1rem;
     font-weight: 400;
-    letter-spacing: 1.2;
-    line-height: 1.2;
-    border: none;
-    outline: none;
+    line-height: 1.4;
+    resize: vertical;
+    height: 400px;
+    width: 100%;
+
 }

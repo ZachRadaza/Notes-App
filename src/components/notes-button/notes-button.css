@@ -1,86 +1,80 @@
-.container{
+.container {
     background-color: #3A3A3C;
-    border-top: #2C2C2E 1px solid;
-    border-bottom: #2C2C2E 1px solid;
-    width: 480px;
+    border-top: 1px solid #2C2C2E;
+    border-bottom: 1px solid #2C2C2E;
+    width: 100%;
     display: flex;
     align-items: center;
-    flex-direction: row;
     justify-content: space-between;
+    transition: background 0.2s ease;  
+    cursor: pointer;                   
 }
 
-.container:hover{
+.container:hover {
     background-color: #2C2C2E;
 }
 
-.container.first-button{
+.container.first-button {
     margin-top: 10px;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+    overflow: hidden;                   
 }
 
-.container.last-button{
+.container.last-button {
     margin-bottom: 10px;
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
+    overflow: hidden;
 }
 
-.left-container{
+.left-container {
     display: flex;
     align-items: flex-start;
-    background-color: transparent;
+    gap: 12px;                        
+    padding: 10px 16px;
+    flex: 1;                 
 }
 
-#important-icon{
-    font-weight: 500;
-    color: #FFF9C4;
-    font-size: 40px;
-    margin: 10px;
-    margin-right: 20px;
-    background-color: transparent;
+#important-icon {
+    font-weight: 700;
+    color: #FFD60A;              
+    font-size: 20px;              
+    margin: 2px 0 0 0;
 }
 
-.words{
+.words {
     display: flex;
-    align-items: flex-start;
     flex-direction: column;
     background-color: transparent;
-    gap: 0;
 }
 
-.words h1, .words h4{
-    padding: 0;
-    margin: 5px 10px;
-    border: 0;
-    background-color: transparent;
-}
-
-.words h1{
+.words h1 {
     font-weight: 600;
-    font-size: large;
+    font-size: 1rem;           
+    color: #fff;
+    margin: 0 0 4px 0;
 }
 
-.words h4{
+.words h4 {
     font-weight: 400;
-    font-size: medium;
+    font-size: 0.875rem;               
     color: #8E8E93;
+    margin: 0;
 }
 
 .delete {
     border: none;
     outline: none;
-    font-size: 15px;
-    line-height: 1.5;
-    color: #FFFFFF;;
+    font-size: 14px;
+    color: #FF453A;
     background-color: transparent;
-    margin: 10px;
-    padding: 5px 10px;
-    border-radius: 20px;
-    margin-left: 20px;
-    
+    margin: 10px 16px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
 }
 
-.delete:hover{
-    background-color: #3A3A3C;
-
+.delete:hover {
+    background-color: rgba(255, 69, 58, 0.15);
 }

@@ -109,8 +109,8 @@ export class NotesDialog extends HTMLDialogElement{
         this._title = this.inputTitle.value;
         this._noteBody = this.textArea.value;
         this._important = this.inputImportant.checked;
-        const truncated = this._noteBody && this._noteBody.length > 50
-            ? this._noteBody.substring(0, 50) + "..."
+        const truncated = this._noteBody && this._noteBody.length > 100
+            ? this._noteBody.substring(0, 100) + "..."
             : this._noteBody ?? ""; // fallback to empty string if undefined
 
         this._newDialog ? this.create(truncated) : this.save(truncated);
